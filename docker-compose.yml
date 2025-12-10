@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  ai-code-reviewer:
+    image: ghcr.io/UmerShahmeerAhmad/GenAI_Mid-Project:latest
+    container_name: ai-code-reviewer
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_DEBUG=False
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - GROK_API_KEY=${GROK_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - ai-reviewer-network
+
+networks:
+  ai-reviewer-network:
+    driver: bridge
